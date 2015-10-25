@@ -52,3 +52,14 @@ Now run the engelsystem the following way
 docker run -d --link mysql-engelsystem:mysql -p 80:80 whiledo/engelsystem
 
 Don't forget to add -e installmysql="yes" if the Database is empty
+
+# Create a new Automated Docker Build on Docker Hub
+You have to be Admin of the engelsystem fork
+
+Login to http://hub.docker.com  
+Click Create -> Create Automated Build  
+Choose GitHub and, if not already done, connect to your GitHub Account  
+Choose the engelsystem  
+Type in a docker container name
+Choose "Branch" and replace master by the current branch's name (e.g. fhmuc-tool)  
+Click Create  
