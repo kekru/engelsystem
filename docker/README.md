@@ -60,7 +60,7 @@ Login to http://hub.docker.com
 Click Create -> Create Automated Build  
 Choose GitHub and, if not already done, connect to your GitHub Account  
 Choose the engelsystem  
-Type in a docker container name
+Type in a docker container name  
 Choose "Branch" and replace master by the current branch's name (e.g. fhmuc-tool)  
 Click Create  
 
