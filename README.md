@@ -34,6 +34,6 @@ Localhost funktioniert hier nicht, es sei denn, wir benutzen den link-Mechanismu
 
 Füge beim ersten Starten noch -e installmysql="yes" hinzu, damit die MYSQL Datanbank erzeugt und mit db/install.sql gefüllt wird
 
-Alle weiteren Optionen fidnest du in [docker/README.md](docker/README.md)
+Alle weiteren Optionen findest du in [docker/README.md](docker/README.md)
 
 
