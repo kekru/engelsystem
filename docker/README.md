@@ -10,12 +10,12 @@ More information about the MYSQL you find here [https://hub.docker.com/_/mysql/]
 
 ## Start the Engelsystem  
 Run the following to start the engelsystem (replace the IP address with the IP of your Dockerserver)  
-docker run -d -p 80:80 -e mysqlhost="192.168.0.102" whiledo/engelsystem
+docker run -d -p 80:80 -e mysqlhost="192.168.0.102" whiledo/engelsystem-fhmuc-tool
 
 localhost or 127.0.0.1 does not work, but you can use Dockers Linking system (see below)
 
 Add -e installmysql="yes" to generate the engelsystem-Database and fill it with db/install.sql  
-e.g. docker run -d -p 80:80 -e mysqlhost="192.168.0.102" -e installmysql="yes" whiledo/engelsystem
+e.g. docker run -d -p 80:80 -e mysqlhost="192.168.0.102" -e installmysql="yes" whiledo/engelsystem-fhmuc-tool
 
 Add --name my-engelsystem to easily restart the engelsystem with  
 docker start my-engelsystem
@@ -49,7 +49,7 @@ docker run --name mysql-engelsystem -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql
 You will not be able to connect to the MYSQL except by a container linking to it.
 
 Now run the engelsystem the following way  
-docker run -d --link mysql-engelsystem:mysql -p 80:80 whiledo/engelsystem
+docker run -d --link mysql-engelsystem:mysql -p 80:80 whiledo/engelsystem-fhmuc-tool
 
 Don't forget to add -e installmysql="yes" if the Database is empty
 
