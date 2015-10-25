@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$mysqllink" = "yes" ]; then
+if [ -n "$MYSQL_PORT_3306_TCP_ADDR" ]; then
 	echo "Using Docker link to connect to MYSQL DB Container"
 	export mysqlhost=$MYSQL_PORT_3306_TCP_ADDR
 fi

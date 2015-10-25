@@ -14,7 +14,7 @@ docker run -d -p 80:80 -e mysqlhost="192.168.0.102" whiledo/engelsystem
 
 localhost or 127.0.0.1 does not work, but you can use Dockers Linking system (see below)
 
-Add -e installmysql="yes" to generate the engelsystem-Database and rill it with db/install.sql  
+Add -e installmysql="yes" to generate the engelsystem-Database and fill it with db/install.sql  
 e.g. docker run -d -p 80:80 -e mysqlhost="192.168.0.102" -e installmysql="yes" whiledo/engelsystem
 
 Add --name my-engelsystem to easily restart the engelsystem with  
@@ -25,8 +25,7 @@ You can add the following options with -e when you run the engelsystem.
 The values below are the default values
 
 apachestartmode="FOREGROUND" //or "BACKGROUND" to start apache in background  
-installmysql="no" // "yes" to create database if not exists and run engelsystem/db/install.sql  
-mysqllink="no" // "yes" to enable Dockers linking system for the MYSQL Container  
+installmysql="no" // "yes" to create database if not exists and run engelsystem/db/install.sql    
 
 mysqldbname="engelsystem"  
 mysqluser="root"  
@@ -50,6 +49,6 @@ docker run --name mysql-engelsystem -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql
 You will not be able to connect to the MYSQL except by a container linking to it.
 
 Now run the engelsystem the following way  
-docker run -d -e mysqllink="yes" --link mysql-engelsystem:mysql -p 80:80 whiledo/engelsystem
+docker run -d --link mysql-engelsystem:mysql -p 80:80 whiledo/engelsystem
 
 Don't forget to add -e installmysql="yes" if the Database is empty
