@@ -63,3 +63,5 @@ Choose the engelsystem
 Type in a docker container name
 Choose "Branch" and replace master by the current branch's name (e.g. fhmuc-tool)  
 Click Create  
+
+Everytime you push new files to the GitHub repository, Docker Hub will build the Container
