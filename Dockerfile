@@ -22,6 +22,7 @@ ADD docker/resources /data/resources
 
 ENV apachestartmode="FOREGROUND" \
 	installmysql="no" \
+	mysqllink="no" \
 
 	mysqldbname="engelsystem" \
 	mysqluser="root" \

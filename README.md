@@ -24,7 +24,8 @@ Fehler bitte auf Github melden: https://github.com/welcomehelpde/engelsystem/iss
 ## Starten im Dockercontainer
 Zuerst brauchen wir eine MYSQL Datenbank:  
 docker run --name mysql-engelsystem -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 3306:3306 -d mysql  
-Wenn die MYSQL gestoppt wurde, kann sie folgendmaﬂen wieder gestartet werden: docker start mysql-engelsystem
+Wenn die MYSQL gestoppt wurde, kann sie folgendmaﬂen wieder gestartet werden:  
+docker start mysql-engelsystem
 
 Dann starten wir das Engelsystem:  
 docker run -d -p 80:80 -e mysqlhost="192.168.0.102" whiledo/engelsystem
