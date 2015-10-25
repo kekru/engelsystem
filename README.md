@@ -1,4 +1,4 @@
-# Hallo liebe Coder!
+ï»¿# Hallo liebe Coder!
 # Installation eines frischen Engelsystems
 
 ## Mindestvorrausetzungen (bzw. getestet unter):
@@ -24,7 +24,7 @@ Fehler bitte auf Github melden: https://github.com/welcomehelpde/engelsystem/iss
 ## Starten im Dockercontainer
 Zuerst brauchen wir eine MYSQL Datenbank:  
 docker run --name mysql-engelsystem -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 3306:3306 -d mysql  
-Wenn die MYSQL gestoppt wurde, kann sie folgendmaßen wieder gestartet werden:  
+Wenn die MYSQL gestoppt wurde, kann sie folgendmaÃŸen wieder gestartet werden:  
 docker start mysql-engelsystem
 
 Dann starten wir das Engelsystem:  
@@ -32,7 +32,7 @@ docker run -d -p 80:80 -e mysqlhost="192.168.0.102" whiledo/engelsystem
 
 Localhost funktioniert hier nicht, es sei denn, wir benutzen den link-Mechanismus (siehe [docker/README.md](docker/README.md))
 
-Füge beim ersten Starten noch -e installmysql="yes" hinzu, damit die MYSQL Datanbank erzeugt und mit db/install.sql gefüllt wird
+FÃ¼ge beim ersten Starten noch -e installmysql="yes" hinzu, damit die MYSQL Datanbank erzeugt und mit db/install.sql gefÃ¼llt wird
 
 Alle weiteren Optionen findest du in [docker/README.md](docker/README.md)
 

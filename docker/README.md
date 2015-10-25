@@ -1,4 +1,4 @@
-# Engelsystem in Docker Container
+﻿# Engelsystem in Docker Container
 ## Start MYSQL Container
 First we need a MYSQL Database:  
 docker run --name mysql-engelsystem -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 3306:3306 -d mysql  
@@ -65,3 +65,6 @@ Choose "Branch" and replace master by the current branch's name (e.g. fhmuc-tool
 Click Create  
 
 Everytime you push new files to the GitHub repository, Docker Hub will build the Container
+
+## Docker Hub Fails without exception text
+When you get an exception on Docker Hub's Automated Build, check that all README.md files are UTF-8 encoded
