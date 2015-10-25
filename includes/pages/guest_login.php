@@ -12,6 +12,10 @@ function logout_title() {
   return _("Logout");
 }
 
+function user_activate_account_title() {
+  return _("Activate Account");
+}
+
 // Engel registrieren
 function guest_register() {
   global $default_theme, $genders;
@@ -107,6 +111,9 @@ function guest_register() {
 
 
     if ($ok) {
+      $confirmationToken = bin2hex(mcrypt_create_iv(16, MCRYPT_DEV_URANDOM));
+      $confirmationTokenUrl = page_link_to_absolute('user_activate_account') . '&token=' . $confirmationToken;
+
       sql_query("
           INSERT INTO `User` SET 
           `color`='" . sql_escape($default_theme) . "', 
@@ -116,19 +123,18 @@ function guest_register() {
           `Alter`='" . sql_escape($age) . "', 
           `gender`='" . sql_escape($gender) . "',
           `Telefon`='" . sql_escape($tel) . "', 
-          `DECT`='" . sql_escape($dect) . "', 
           `Handy`='" . sql_escape($mobile) . "', 
           `email`='" . sql_escape($mail) . "', 
           `email_shiftinfo`=" . sql_bool($email_shiftinfo) . ", 
-          `jabber`='" . sql_escape($jabber) . "',
-          `Size`='" . sql_escape($tshirt_size) . "', 
           `Passwort`='" . sql_escape($password_hash) . "', 
           `kommentar`='" . sql_escape($comment) . "', 
           `Hometown`='" . sql_escape($hometown) . "', 
           `CreateDate`=NOW(), 
           `Sprache`='" . sql_escape($_SESSION["locale"]) . "',
           `arrival_date`=NULL,
-          `planned_arrival_date`='" . sql_escape($planned_arrival_date) . "'");
+          `planned_arrival_date`= 0,
+          `mailaddress_verification_token` = '" . sql_escape($confirmationToken) . "',
+          `user_account_approved` = 0");
       
       // Assign user-group and set password
       $user_id = sql_id();
@@ -142,14 +148,17 @@ function guest_register() {
         $user_angel_types_info[] = $angel_types[$selected_angel_type_id];
       }
       engelsystem_log("User " . $nick . " signed up as: " . join(", ", $user_angel_types_info));
-      success(_("Angel registration successful!"));
+
+      engelsystem_email($mail, _('Please confirm your eMail-address'), sprintf(_('Hello %1$s! Thanks for signing up at Engelsystem. Please confirm your eMail-address by clicking the following link: %2$s'), $mail, $confirmationTokenUrl));
       
+      success(_("Angel registration successful! Please click the confirmation link in the eMail we sent you to activate your account."));
+
       redirect('?');
     }
   }
   
   return page_with_title(register_title(), array(
-      _("By completing this form you're registering as an angel. This script will create you an account in the angel task sheduler."),
+      _("By completing this form you're registering as an helper. Please enter a username/nick of your choice, your e-mail adress and your full name. Only your nick will be shown to other users."),
       $msg,
       msg(),
       form(array(
@@ -161,7 +170,13 @@ function guest_register() {
                       )),
                       div('col-sm-8', array(
                           form_email('mail', _("E-Mail") . ' ' . entry_required(), $mail),
-                          form_checkbox('email_shiftinfo', _("Please send me an email if my shifts change"), $email_shiftinfo) 
+                          form_checkbox('email_shiftinfo', _("Please keep me informed by e-mail, e.g. if my shifts change"), $email_shiftinfo) 
+                      )),
+					  div('col-sm-4', array(
+                          form_text('prename', _("First name") . ' ' . entry_required(), $prename) 
+                      )),
+                      div('col-sm-4', array(
+                          form_text('lastname', _("Last name") . ' ' . entry_required(), $lastname) 
                       )) 
                   )),
                   div('row', array(
@@ -178,8 +193,8 @@ function guest_register() {
                           form_password('password2', _("Confirm password") . ' ' . entry_required()) 
                       )) 
                   )),
-                  form_checkboxes('angel_types', _("What do you want to do?") . sprintf(" (<a href=\"%s\">%s</a>)", page_link_to('angeltypes') . '&action=about', _("Description of job types")), $angel_types, $selected_angel_types),
-                  form_info("", _("Restricted angel types need will be confirmed later by an archangel. You can change your selection in the options section.")) 
+                  // form_checkboxes('angel_types', _("What do you want to do?") . sprintf(" (<a href=\"%s\">%s</a>)", page_link_to('angeltypes') . '&action=about', _("Description of job types")), $angel_types, $selected_angel_types),
+                 //				 form_info("", _("Restricted angel types need will be confirmed later by an archangel. You can change your selection in the options section.")) 
               )),
               div('col-md-6', array(
                   div('row', array(
@@ -188,29 +203,18 @@ function guest_register() {
                       )),
                       div('col-sm-4', array(
                           form_text('tel', _("Phone"), $tel) 
-                      )),
-                      div('col-sm-4', array(
-                          
-                      )) 
-                  )),
-                  div('row', array(
-                      div('col-sm-6', array(
-                          form_text('prename', _("First name"), $prename) 
-                      )),
-                      div('col-sm-6', array(
-                          form_text('lastname', _("Last name"), $lastname) 
                       )) 
                   )),
                   div('row', array(
                       div('col-sm-3', array(
                           form_text('age', _("Age"), $age) 
                       )),
-                      div('col-sm-3', array(
-                          form_select('gender', _("Gender"), $genders, $gender)
-                      )),
-                      div('col-sm-6', array(
-                          form_text('hometown', _("Hometown"), $hometown) 
-                      )),
+//                      div('col-sm-3', array(
+//                          form_select('gender', _("Gender"), $genders, $gender)
+//                      )),
+//                      div('col-sm-6', array(
+//                          form_text('hometown', _("Hometown"), $hometown) 
+//                      )),
                       div('col-sm-6', array(
                               form_text('comment', _("Additional Information(Language / Profession)"), $comment)
                           ))
@@ -252,6 +256,12 @@ function guest_login() {
             $ok = false;
             error(_("Your password is incorrect.  Please try it again."));
           }
+          else { //password is okay, check confirmaiton
+            if($login_user['user_account_approved'] !== '1') {
+              $ok = false;
+              error(_("Your account is not confirmed yet. Please click the link in the mail we sent you. If you didn't get an eMail, ask a dispatcher."));
+            }
+          }
         } else {
           $ok = false;
           error(_("Please enter a password."));
@@ -269,7 +279,7 @@ function guest_login() {
       $_SESSION['uid'] = $login_user['UID'];
       $_SESSION['locale'] = $login_user['Sprache'];
       
-      redirect(page_link_to('news'));
+      redirect(page_link_to('shifts'));
     }
   }
   
@@ -298,16 +308,37 @@ function guest_login() {
           )),
           info(_("Please note: You have to activate cookies!"), true) 
       )),
-      '</div>',
-      '<div class="col-md-6">',
-      '<h2>' . register_title() . '</h2>',
-      $register_hint,
-      '<h2>' . _("What can I do?") . '</h2>',
-      '<p>' . _("Please read about the jobs you can do to help us.") . '</p>',
-      buttons(array(
-          button(page_link_to('angeltypes') . '&action=about', _("Teams/Job description") . ' &raquo;') 
-      )),
       '</div></div>' 
   ));
 }
+
+function user_activate_account_controller () {
+  if(!isset($_GET['token'])) {
+    error(_("Invalid confirmation token."));
+    redirect('?');
+    die();
+  }
+  
+  $token = $_GET['token'];
+
+  $checkQuery = 'SELECT COUNT(`UID`) as `exists`
+                 FROM `User`
+                 WHERE `mailaddress_verification_token` = "' . sql_escape($token) . '"';
+  $checkResult = sql_select_single_cell($checkQuery);
+
+  if($checkResult === '1') {
+    $confirmSql = 'UPDATE `User`
+                   SET `user_account_approved` = "1"
+                   WHERE `mailaddress_verification_token` = "' . sql_escape($token) . '"';
+    sql_query($confirmSql);
+    success(_('Your account is confirmed now. You might want to log in:'));
+    redirect(page_link_to('login'));
+  }
+  else {
+    error(_("Invalid confirmation token."));
+    redirect('?');
+    die();    
+  }
+}
+
 ?>

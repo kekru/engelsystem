@@ -100,7 +100,7 @@ function toolbar_item_divider() {
 
 function toolbar_dropdown($glyphicon, $label, $submenu, $class = '') {
   return '<li class="dropdown ' . $class . '">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">' . ($glyphicon != '' ? '<span class="glyphicon glyphicon-' . $glyphicon . '"></span> ' : '') . $label . ' <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">' . '<i class="fa fa-bars"></i>' . $label . ' <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">' . join("\n", $submenu) . '</ul></li>';
 }
 
@@ -210,7 +210,7 @@ function form_checkboxes($name, $label, $items, $selected) {
   foreach ($items as $key => $item) {
     $id = $name . '_' . $key;
     $sel = array_search($key, $selected) !== false ? ' checked="checked"' : "";
-    $html .= '<li><input type="checkbox" id="' . $id . '" name="' . $id . '" value="checked"' . $sel . ' /><label for="' . $id . '">' . $item . '</label></li>';
+    $html .= '<li><input type="hidden" id="' . $id . '" name="' . $id . '" value="checked"' . $sel . ' /><label for="' . $id . '">' . $item . '</label></li>';
   }
   $html .= "</ul>";
   return form_element($label, $html);

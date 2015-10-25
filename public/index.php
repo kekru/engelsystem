@@ -1,13 +1,18 @@
 <?php
 
 require_once realpath(__DIR__ . '/../includes/engelsystem_provider.php');
+require_once realpath(__DIR__ . '/../includes/privacynote.php');
 
 $free_pages = array(
     'stats',
     'shifts_json_export_all',
     'user_password_recovery',
+    'user_activate_account',
     'api',
     'credits',
+    'faq2',
+    'imprint',
+    'privacy',
     'angeltypes',
     'users',
     'ical',
@@ -22,7 +27,7 @@ $free_pages = array(
 // Gewünschte Seite/Funktion
 $p = "";
 if (! isset($_REQUEST['p']))
-  $_REQUEST['p'] = isset($user) ? "news" : "dashboard";
+  $_REQUEST['p'] = isset($user) ? "shifts" : "dashboard";
 if (isset($_REQUEST['p'])
     && preg_match("/^[a-z0-9_]*$/i", $_REQUEST['p'])
     &&(in_array($_REQUEST['p'], $free_pages) || in_array($_REQUEST['p'], $privileges))) {
@@ -55,6 +60,9 @@ if (isset($_REQUEST['p'])
         require_once realpath(__DIR__ . '/../includes/controller/users_controller.php');
         $title = user_password_recovery_title();
         $content = user_password_recovery_controller();
+      } elseif($p === "user_activate_account") {
+        $title = user_activate_account_title();
+        $content = user_activate_account_controller();
       } elseif ($p == "angeltypes") {
         list($title, $content) = angeltypes_controller();
       } elseif ($p == "shifts") {
@@ -139,6 +147,18 @@ if (isset($_REQUEST['p'])
         require_once realpath(__DIR__ . '/../includes/pages/guest_credits.php');
         $title = credits_title();
         $content = guest_credits();
+      } elseif ($p == "faq2") {
+        require_once realpath(__DIR__ . '/../includes/pages/guest_faq2.php');
+        $title = credits_title();
+        $content = guest_credits();
+      } elseif ($p == "imprint") {
+        require_once realpath(__DIR__ . '/../includes/pages/guest_imprint.php');
+        $title = credits_title();
+        $content = guest_credits();
+      } elseif ($p == "privacy") {
+        require_once realpath(__DIR__ . '/../includes/pages/guest_privacy.php');
+        $title = credits_title();
+        $content = guest_credits();
       } elseif ($p === "dashboard") {
         require_once realpath(__DIR__ . '/../includes/pages/dashboard.php');
         $title = getDashboardTitle();
@@ -167,6 +187,7 @@ echo template_render('../templates/layout.html', array(
     'atom_link' => ($p == 'news' || $p == 'user_meetings') ? '<link href="' . page_link_to('atom') . (($p == 'user_meetings') ? '&amp;meetings=1' : '') . '&amp;key=' . $user['api_key'] . '" type="application/atom+xml" rel="alternate" title="Atom Feed">' : '',
     'menu' => make_menu(),
     'content' => msg() . $content,
+    'privacy_note' => PN_ShowNotice(),
     'header_toolbar' => header_toolbar(),
     'faq_url' => $faq_url,
     'locale' => locale(),

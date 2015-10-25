@@ -91,7 +91,10 @@ INSERT INTO `GroupPrivileges` (`id`, `group_id`, `privilege_id`) VALUES
 (250, -2, 37),
 (88, -1, 1),
 (23, -1, 2),
-(24, -1, 5);
+(24, -1, 5),
+(260, -1, 39),
+(261, -1, 40),
+(262, -1, 41);
 
 -- --------------------------------------------------------
 
@@ -111,12 +114,12 @@ CREATE TABLE IF NOT EXISTS `Groups` (
 --
 
 INSERT INTO `Groups` (`Name`, `UID`) VALUES
-('6-Developer', -7),
-('5-Erzengel', -6),
-('4-Team Coordinator', -5),
-('3-Shift Coordinator', -4),
-('Shirt-Manager', -3),
-('2-Engel', -2),
+('6-Developer und Admins', -7),
+('5-Leitung', -6),
+('4-Teamleitung', -5),
+('3-Schichtleitung', -4),
+('-USER GESPERRT-', -3),
+('2-Helfer', -2),
 ('1-Gast', -1);
 
 -- --------------------------------------------------------
@@ -266,7 +269,10 @@ INSERT INTO `Privileges` (`id`, `name`, `desc`) VALUES
 (35, 'shifts_json_export', 'Export shifts in JSON format'),
 (36, 'angeltypes', 'View angeltypes'),
 (37, 'user_angeltypes', 'Join angeltypes.'),
-(38, 'shifttypes', 'Administrate shift types');
+(38, 'shifttypes', 'Administrate shift types'),
+(39, 'faq2', 'View FAQ'),
+(40, 'imprint', 'View imprint'),
+(41, 'privacy', 'View privacy statement');
 
 -- --------------------------------------------------------
 
@@ -419,6 +425,8 @@ CREATE TABLE IF NOT EXISTS `User` (
   `arrival_date` int(11) DEFAULT NULL,
   `planned_arrival_date` int(11) NOT NULL,
   `planned_departure_date` int(11) DEFAULT NULL,
+  `mailaddress_verification_token` varchar(32) DEFAULT NULL,
+  `user_account_approved` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`UID`),
   UNIQUE KEY `Nick` (`Nick`),
   KEY `api_key` (`api_key`),
@@ -432,8 +440,8 @@ CREATE TABLE IF NOT EXISTS `User` (
 -- Daten für Tabelle `User`
 --
 
-INSERT INTO `User` (`UID`, `Nick`, `Name`, `Vorname`, `Alter`, `Telefon`, `DECT`, `Handy`, `email`, `email_shiftinfo`, `jabber`, `Size`, `Passwort`, `password_recovery_token`, `Gekommen`, `Aktiv`, `force_active`, `Tshirt`, `color`, `Sprache`, `Menu`, `lastLogIn`, `CreateDate`, `Art`, `kommentar`, `Hometown`, `api_key`, `got_voucher`, `arrival_date`, `planned_arrival_date`, `planned_departure_date`) VALUES
-(1, 'admin', 'Gates', 'Bill', 42, '', '-', '', 'admin@example.com', 1, '', 'XL', '$6$rounds=5000$hjXbIhoRTH3vKiRa$Wl2P2iI5T9iRR.HHu/YFHswBW0WVn0yxCfCiX0Keco9OdIoDK6bIAADswP6KvMCJSwTGdV8PgA8g8Xfw5l8BD1', NULL, 1, 1, 0, 1, 2, 'de_DE.UTF-8', 'L', 1439759300, '0000-00-00 00:00:00', '', '', '', '038850abdd1feb264406be3ffa746235', 3, 1439490478, 1436964455, 1440161255);
+INSERT INTO `User` (`UID`, `Nick`, `Name`, `Vorname`, `Alter`, `Telefon`, `DECT`, `Handy`, `email`, `email_shiftinfo`, `jabber`, `Size`, `Passwort`, `password_recovery_token`, `Gekommen`, `Aktiv`, `force_active`, `Tshirt`, `color`, `Sprache`, `Menu`, `lastLogIn`, `CreateDate`, `Art`, `kommentar`, `Hometown`, `api_key`, `got_voucher`, `arrival_date`, `planned_arrival_date`, `planned_departure_date`, `mailaddress_verification_token`, `user_account_approved`) VALUES
+(1, 'admin', 'Gates', 'Bill', 42, '', '-', '', 'admin@example.com', 1, '', 'XL', '$6$rounds=5000$hjXbIhoRTH3vKiRa$Wl2P2iI5T9iRR.HHu/YFHswBW0WVn0yxCfCiX0Keco9OdIoDK6bIAADswP6KvMCJSwTGdV8PgA8g8Xfw5l8BD1', NULL, 1, 1, 0, 1, 2, 'de_DE.UTF-8', 'L', 1439759300, '0000-00-00 00:00:00', '', '', '', '038850abdd1feb264406be3ffa746235', 3, 1439490478, 1436964455, 1440161255, '', 1);
 
 -- --------------------------------------------------------
 
