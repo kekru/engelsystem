@@ -1,4 +1,5 @@
-﻿# Hallo liebe Coder!
+﻿[![Build Status](https://travis-ci.org/kekru/engelsystem.svg?branch=fhmuc-tool)](https://travis-ci.org/kekru/engelsystem)  
+# Hallo liebe Coder!
 # Installation eines frischen Engelsystems
 
 ## Mindestvorrausetzungen (bzw. getestet unter):

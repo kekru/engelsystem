@@ -4,5 +4,5 @@ If you need an other folder, define it in test/phpunit.xml
 
 The Name must be *Test.php (with an uppercase T).  
 
-Inside the File define a class also called *Test.php,  
+Inside the File define a class also called *Test,  
 e.g. class LogEntries_model_Test extends PHPUnit_Framework_TestCase {...}
