@@ -1,6 +1,6 @@
 <?php
 
-class Room_model_test extends PHPUnit_Framework_TestCase {
+class Room_model_Test extends PHPUnit_Framework_TestCase {
 
   private $room_id = null;
 
