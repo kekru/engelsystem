@@ -1,5 +1,5 @@
 <?php
-
+ 
 class LogEntries_model_Test extends PHPUnit_Framework_TestCase {
 
   public function create_LogEntry() {
