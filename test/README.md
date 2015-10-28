@@ -1,5 +1,5 @@
 # Test files
-Be sure to place your Testfiles in [test/model](test/model).  
+Be sure to place your Testfiles in [test/model](model).  
 If you need an other folder, define it in test/phpunit.xml  
 
 The Name must be *Test.php (with an uppercase T).  
